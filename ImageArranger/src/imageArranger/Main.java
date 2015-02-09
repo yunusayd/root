@@ -20,11 +20,13 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Dimension2D;
+import java.io.File;
 
-public class Main extends JFrame {
+public class Main extends JFrame implements ImageCatalogCallBack {
 	private JTextField txtSource;
 	private JTextField txtTarget;
-
+	private JLabel lblStat;
+	private ImageCatalog imageCatalog;
 	public Main() {
 		setTitle("Image Arranger");
 		getContentPane().setLayout(
@@ -57,14 +59,7 @@ public class Main extends JFrame {
 		JButton btnSource = new JButton("...");
 		btnSource.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String folder = chooseFolderDialog();
-				if(folder != "")
-				{
-					txtSource.setText(folder);
-					ImageCatalog catalog = new ImageCatalog(folder);
-					catalog.Process();
-				}
-				 
+				startCatalog();
 			}
 		});
 		getContentPane().add(btnSource, "6, 2");
@@ -96,15 +91,26 @@ public class Main extends JFrame {
 			}
 		});
 		getContentPane().add(btnStartGrouping, "4, 6");
-	}
-	
-	private String chooseFolderDialog()
-	{
-		JFileChooser chooser = new JFileChooser();
 		
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		if(chooser.showOpenDialog(null)== JFileChooser.APPROVE_OPTION)
+		lblStat = new JLabel("Stat");
+		getContentPane().add(lblStat, "4, 10");
+	}
+
+	private void startCatalog()
+	{
+		String folder = chooseFolderDialog();
+		if(folder != "")
 		{
+			txtSource.setText(folder);
+			imageCatalog = new ImageCatalog(folder, this);
+			imageCatalog.start();
+		}
+	}
+	private String chooseFolderDialog() {
+		JFileChooser chooser = new JFileChooser();
+
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			return chooser.getSelectedFile().getAbsolutePath();
 		}
 		return "";
@@ -114,6 +120,15 @@ public class Main extends JFrame {
 		// TODO Auto-generated method stub
 		new Main().setVisible(true);
 
+	}
+
+	// CallBack
+	public void progress(int fileIx, int totalFile, File file) {
+		lblStat.setText(String.format("%d/%d => %s", fileIx, totalFile, file.getName()));
+	}
+
+	public void finished() {
+		lblStat.setText("Finished! total file: "+imageCatalog.fileCount+", total catalog:"+imageCatalog.catalogList.size());
 	}
 
 }

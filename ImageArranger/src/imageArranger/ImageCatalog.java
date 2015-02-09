@@ -3,15 +3,20 @@ package imageArranger;
 import java.util.*;
 import java.io.*;
 
-public class ImageCatalog {
+import org.apache.commons.io.FilenameUtils;
+
+public class ImageCatalog extends Thread {
+
+	public int fileCount = 0;
+	public List<ImageCatalogItem> catalogList;
 
 	private String folder;
-	private List<ImageCatalogItem> catalogList;
+	private ImageCatalogCallBack callBack;
 
-	public ImageCatalog(String pfolder) {
+	public ImageCatalog(String pfolder, ImageCatalogCallBack callBack) {
 		this.folder = pfolder;
 		catalogList = new ArrayList<ImageCatalogItem>();
-
+		this.callBack = callBack;
 	}
 
 	private void walkOnFiles(String pfolder) {
@@ -30,14 +35,23 @@ public class ImageCatalog {
 	}
 
 	void addToList(File file) {
-		long lastModified = file.lastModified();
-		Date date = new Date(lastModified);
-		int year = date.getYear();
-		int month = date.getMonth();
-		// String monthName = MonthNames.getMonthName(month);
+		String fileName = file.getName();
+		String ext = FilenameUtils.getExtension(fileName);
+		if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("png")
+				|| ext.equalsIgnoreCase("mov") || ext.equalsIgnoreCase("mp4")
+				|| ext.equalsIgnoreCase("jpeg")) {
+			long lastModified = file.lastModified();
+			Date date = new Date(lastModified);
+			int year = date.getYear();
+			int month = date.getMonth();
+			// String monthName = MonthNames.getMonthName(month);
 
-		ImageCatalogItem item = findCatalogItem(year, month, "");
-
+			ImageCatalogItem item = findCatalogItem(year, month, "");
+			item.files.add(fileName);
+			fileCount++;
+			if (callBack != null)
+				callBack.progress(0, fileCount, file);
+		}
 	}
 
 	ImageCatalogItem findCatalogItem(int year, int month, String place) {
@@ -57,9 +71,10 @@ public class ImageCatalog {
 		return result;
 	}
 
-	public void Process() {
+	public void run() {
 		walkOnFiles(folder);
-
+		if (callBack != null)
+			callBack.finished();
 	}
 
 }

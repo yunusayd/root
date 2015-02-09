@@ -61,7 +61,10 @@ public class Main extends JFrame {
 				if(folder != "")
 				{
 					txtSource.setText(folder);
+					ImageCatalog catalog = new ImageCatalog(folder);
+					catalog.Process();
 				}
+				 
 			}
 		});
 		getContentPane().add(btnSource, "6, 2");

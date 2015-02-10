@@ -47,6 +47,10 @@ public class Main extends JFrame implements ImageCatalogCallBack {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 
 		JLabel lblNewLabel = new JLabel("Source");
@@ -92,6 +96,14 @@ public class Main extends JFrame implements ImageCatalogCallBack {
 		});
 		getContentPane().add(btnStartGrouping, "4, 6");
 		
+		JButton btnStartCopy = new JButton("Start Copy");
+		btnStartCopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				startCopy();
+			}
+		});
+		getContentPane().add(btnStartCopy, "4, 8");
+		
 		lblStat = new JLabel("Stat");
 		getContentPane().add(lblStat, "4, 10");
 	}
@@ -105,6 +117,11 @@ public class Main extends JFrame implements ImageCatalogCallBack {
 			imageCatalog = new ImageCatalog(folder, this);
 			imageCatalog.start();
 		}
+	}
+	
+	private void startCopy()
+	{
+		
 	}
 	private String chooseFolderDialog() {
 		JFileChooser chooser = new JFileChooser();

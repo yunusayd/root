@@ -27,31 +27,31 @@ public class Main extends JFrame implements ImageCatalogCallBack {
 	private JTextField txtTarget;
 	private JLabel lblStat;
 	private ImageCatalog imageCatalog;
+
 	public Main() {
 		setTitle("Image Arranger");
 		getContentPane().setLayout(
 				new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(153dlu;default):grow"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(22dlu;default):grow"),},
-			new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+						FormFactory.RELATED_GAP_COLSPEC,
+						FormFactory.DEFAULT_COLSPEC,
+						FormFactory.RELATED_GAP_COLSPEC,
+						ColumnSpec.decode("max(153dlu;default):grow"),
+						FormFactory.RELATED_GAP_COLSPEC,
+						ColumnSpec.decode("max(22dlu;default):grow"), },
+						new RowSpec[] { FormFactory.RELATED_GAP_ROWSPEC,
+								FormFactory.DEFAULT_ROWSPEC,
+								FormFactory.RELATED_GAP_ROWSPEC,
+								FormFactory.DEFAULT_ROWSPEC,
+								FormFactory.RELATED_GAP_ROWSPEC,
+								FormFactory.DEFAULT_ROWSPEC,
+								FormFactory.RELATED_GAP_ROWSPEC,
+								FormFactory.DEFAULT_ROWSPEC,
+								FormFactory.RELATED_GAP_ROWSPEC,
+								FormFactory.DEFAULT_ROWSPEC,
+								FormFactory.RELATED_GAP_ROWSPEC,
+								FormFactory.DEFAULT_ROWSPEC,
+								FormFactory.RELATED_GAP_ROWSPEC,
+								FormFactory.DEFAULT_ROWSPEC, }));
 
 		JLabel lblNewLabel = new JLabel("Source");
 		getContentPane().add(lblNewLabel, "2, 2, right, default");
@@ -79,23 +79,22 @@ public class Main extends JFrame implements ImageCatalogCallBack {
 		btnTarget.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String folder = chooseFolderDialog();
-				if(folder != "")
-				{
+				if (folder != "") {
 					txtTarget.setText(folder);
 				}
 			}
 		});
 		getContentPane().add(btnTarget, "6, 4");
-		Container pane = getContentPane(); 
-		pane.setSize(new Dimension(800,600));
-		
+		Container pane = getContentPane();
+		pane.setSize(new Dimension(800, 600));
+
 		JButton btnStartGrouping = new JButton("Start Grouping");
 		btnStartGrouping.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		getContentPane().add(btnStartGrouping, "4, 6");
-		
+
 		JButton btnStartCopy = new JButton("Start Copy");
 		btnStartCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -103,26 +102,24 @@ public class Main extends JFrame implements ImageCatalogCallBack {
 			}
 		});
 		getContentPane().add(btnStartCopy, "4, 8");
-		
+
 		lblStat = new JLabel("Stat");
 		getContentPane().add(lblStat, "4, 10");
 	}
 
-	private void startCatalog()
-	{
+	private void startCatalog() {
 		String folder = chooseFolderDialog();
-		if(folder != "")
-		{
+		if (folder != "") {
 			txtSource.setText(folder);
 			imageCatalog = new ImageCatalog(folder, this);
 			imageCatalog.start();
 		}
 	}
-	
-	private void startCopy()
-	{
-		
+
+	private void startCopy() {
+
 	}
+
 	private String chooseFolderDialog() {
 		JFileChooser chooser = new JFileChooser();
 
@@ -141,11 +138,13 @@ public class Main extends JFrame implements ImageCatalogCallBack {
 
 	// CallBack
 	public void progress(int fileIx, int totalFile, File file) {
-		lblStat.setText(String.format("%d/%d => %s", fileIx, totalFile, file.getName()));
+		lblStat.setText(String.format("%d/%d => %s", fileIx, totalFile,
+				file.getName()));
 	}
 
 	public void finished() {
-		lblStat.setText("Finished! total file: "+imageCatalog.fileCount+", total catalog:"+imageCatalog.catalogList.size());
+		lblStat.setText("Finished! total file: " + imageCatalog.fileCount
+				+ ", total catalog:" + imageCatalog.catalogList.size());
 	}
 
 }
